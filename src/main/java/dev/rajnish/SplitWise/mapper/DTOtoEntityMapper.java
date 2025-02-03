@@ -1,7 +1,11 @@
 package dev.rajnish.SplitWise.mapper;
 
+import java.time.LocalDateTime;
+
+import dev.rajnish.SplitWise.dto.ExpenseRequestDTO;
 import dev.rajnish.SplitWise.dto.GroupRequestDTO;
 import dev.rajnish.SplitWise.dto.UserSignUpRequestDTO;
+import dev.rajnish.SplitWise.model.Expense;
 import dev.rajnish.SplitWise.model.Group;
 import dev.rajnish.SplitWise.model.User;
 
@@ -24,5 +28,17 @@ public class DTOtoEntityMapper {
         group.setDescription(groupRequestDTO.getDescription());
 
         return group;
-    } 
+    }
+
+    public static Expense expenseDTOToEntity(ExpenseRequestDTO expenseRequestDTO)
+    {
+        Expense expense = new Expense();
+        expense.setAmount(expenseRequestDTO.getAmount());
+        expense.setCurrency(expenseRequestDTO.getCurrency());
+        expense.setDescription(expenseRequestDTO.getDescription());
+        expense.setExpenseTime(LocalDateTime.now());
+        expense.setSplitStratergy(expenseRequestDTO.getSplitStratergy());
+
+        return expense;
+    }
 }

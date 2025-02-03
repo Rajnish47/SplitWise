@@ -15,10 +15,10 @@ public class Group extends BaseModel {
 
     private String name;
     private String description;
-    @ManyToMany
+    @ManyToMany(mappedBy = "groups")
     private List<User> groupMembers;
     @OneToMany
     private List<Expense> expenses;
     @OneToMany
-    private List<Transaction> transactions;
+    private List<SettlementTransaction> settlementTransactions;
 }

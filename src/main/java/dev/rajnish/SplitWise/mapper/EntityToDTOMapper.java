@@ -3,11 +3,16 @@ package dev.rajnish.SplitWise.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.rajnish.SplitWise.dto.ExpenseRequestDTO;
+import dev.rajnish.SplitWise.dto.ExpenseResponseDTO;
 import dev.rajnish.SplitWise.dto.FriendResponseDTO;
 import dev.rajnish.SplitWise.dto.GroupResponseDTO;
+import dev.rajnish.SplitWise.dto.UserExpenseResponseDTO;
 import dev.rajnish.SplitWise.dto.UserLoginResponseDTO;
+import dev.rajnish.SplitWise.model.Expense;
 import dev.rajnish.SplitWise.model.Group;
 import dev.rajnish.SplitWise.model.User;
+import dev.rajnish.SplitWise.model.UserExpense;
 
 public class EntityToDTOMapper {
     
@@ -43,6 +48,42 @@ public class EntityToDTOMapper {
         groupResponseDTO.setId(group.getId());
         groupResponseDTO.setName(group.getName());
         groupResponseDTO.setDescription(group.getDescription());
+        groupResponseDTO.setExpenseResponseDTOs(new ArrayList<>());
+        List<String> groupMembers = new ArrayList<>();
+
+        for(User user: group.getGroupMembers())
+        {
+            groupMembers.add(user.getName());
+        }
+
+        groupResponseDTO.setGroupMembers(groupMembers);
+        List<Expense> groupExpenses = group.getExpenses();
+        
+        if(groupExpenses!=null)
+        {
+            List<ExpenseResponseDTO> expenseResponseDTOs = new ArrayList<>();
+            for(Expense expense: groupExpenses)
+            {
+                ExpenseResponseDTO expenseResponseDTO = new ExpenseResponseDTO();
+                expenseResponseDTO.setCreatedBy(expense.getAddedBy().getName());
+                expenseResponseDTO.setId(expense.getId());
+                expenseResponseDTO.setTotalAmount(expense.getAmount());
+                List<UserExpenseResponseDTO> userExpenseResponseDTOs = new ArrayList<>();
+                for(UserExpense userExpense: expense.getUserExpenses())
+                {
+                    UserExpenseResponseDTO userExpenseResponseDTO = new UserExpenseResponseDTO();
+                    userExpenseResponseDTO.setId(userExpense.getId());
+                    userExpenseResponseDTO.setUser(userExpense.getUser().getName());
+                    userExpenseResponseDTO.setAmount(userExpense.getAmount());
+                    userExpenseResponseDTO.setUserExpenseType(userExpense.getUserExpenseType());
+                    userExpenseResponseDTOs.add(userExpenseResponseDTO);                    
+                }
+                expenseResponseDTO.setUserExpenseResponseDTOs(userExpenseResponseDTOs);
+                expenseResponseDTOs.add(expenseResponseDTO);
+            }
+
+            groupResponseDTO.setExpenseResponseDTOs(expenseResponseDTOs);
+        }
 
         return groupResponseDTO;
     }

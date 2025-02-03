@@ -18,11 +18,11 @@ public class Expense extends BaseModel {
 
     private String description;
     private Currency currency;
-    private int amount;
+    private double amount;
     private LocalDateTime expenseTime;
     private SplitStratergy splitStratergy;
     @ManyToOne
-    private Group group;
+    private User addedBy;
     @OneToMany
-    private List<PayoutLedger> payoutLedger;
+    private List<UserExpense> userExpenses;
 }

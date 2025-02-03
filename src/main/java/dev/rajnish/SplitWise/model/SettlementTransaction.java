@@ -1,5 +1,7 @@
 package dev.rajnish.SplitWise.model;
 
+import java.util.Currency;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
@@ -8,12 +10,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class PayoutLedger extends BaseModel {
+public class SettlementTransaction extends BaseModel {
 
     @ManyToOne
-    private User user;
-    private double amountPaid;
-    private double amountOwed;
+    private User lender;
     @ManyToOne
-    private Expense expense;    
+    private User borrower;
+    private double amount;
+    private Currency currency;   
 }

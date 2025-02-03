@@ -50,5 +50,27 @@ public class GroupServiceImpl implements GroupService {
     public Group updateGroup(Group group) {
         return groupRepository.save(group);
     }
-    
+
+    @Override
+    public Group getGroupById(int id) {
+        return groupRepository.findById(id).get();
+    }
+
+    @Override
+    public Group addUserToGroup(int groupId, int userId) {
+        User savedUser = userService.findUserByID(userId);
+        Group savedGroup = groupRepository.findById(groupId).get();
+
+        List<User> groupMembers = savedGroup.getGroupMembers();
+        groupMembers.add(savedUser);
+        savedGroup.setGroupMembers(groupMembers);
+        updateGroup(savedGroup);
+
+        List<Group> userGroups = savedUser.getGroups();
+        userGroups.add(savedGroup);
+        savedUser.setGroups(userGroups);
+        userService.updateUser(savedUser);
+
+        return savedGroup;
+    }    
 }
